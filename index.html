@@ -18,22 +18,17 @@
     content="Token Hub — каталог игровых кодов, наград и официальных способов активации."
   >
 
-  <link rel="manifest" href="manifest.json">
-
   <link
-    rel="icon"
-    type="image/svg+xml"
-    href="icon.svg"
-  >
-
-  <link
-    rel="apple-touch-icon"
-    href="icon.svg"
+    rel="manifest"
+    href="manifest.json"
   >
 
   <title>Token Hub</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 </head>
 
 <body>
@@ -45,8 +40,7 @@
       href="#"
       aria-label="Token Hub"
     >
-      <span class="brand-icon">T</span>
-      <span>Token Hub</span>
+      Token Hub
     </a>
 
     <button
@@ -90,8 +84,7 @@
           Игра
         </label>
 
-        <select id="game">
-        </select>
+        <select id="game"></select>
 
       </div>
 
@@ -244,8 +237,7 @@
       <div
         class="results"
         id="results"
-      >
-      </div>
+      ></div>
 
     </section>
 
@@ -281,13 +273,14 @@
       <div
         class="history"
         id="history"
-      >
-      </div>
+      ></div>
 
     </section>
 
   </main>
 
+
+  <!-- ОКНО «КАК ЭТО РАБОТАЕТ?» -->
 
   <div
     class="modal hidden"
@@ -383,18 +376,20 @@
   </div>
 
 
+  <!-- УВЕДОМЛЕНИЯ -->
+
   <div
     class="toast"
     id="toast"
     role="status"
     aria-live="polite"
-  >
-  </div>
+  ></div>
 
 
   <!--
-    ВАЖНО:
-    data.js должен подключаться ПЕРЕД script.js.
+    ПОРЯДОК ПОДКЛЮЧЕНИЯ ВАЖЕН:
+    сначала база data.js,
+    затем логика script.js.
   -->
 
   <script src="data.js"></script>
