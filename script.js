@@ -1,799 +1,344 @@
-"use strict";
+document.addEventListener("DOMContentLoaded", () => {
 
-/*
- * Token Hub
- * Основная логика приложения.
- *
- * Все игровые данные находятся в data.js.
- */
+  const $ = (selector) =>
+    document.querySelector(selector);
 
-const HISTORY_KEY = "tokenHub.history";
+  const $$ = (selector) =>
+    document.querySelectorAll(selector);
 
-const gameSelect =
-  document.getElementById("game");
+  const gamesGrid = $("#gamesGrid");
+  const gameSearch = $("#gameSearch");
+  const currencyFilter = $("#currencyFilter");
+  const gamesCount = $("#gamesCount");
+  const homeBalance = $("#homeBalance");
 
-const categorySelect =
-  document.getElementById("category");
+  const profileButton = $("#profileButton");
+  const profileModal = $("#profileModal");
+  const closeProfile = $("#closeProfile");
+  const saveProfile = $("#saveProfile");
+  const nicknameInput = $("#nicknameInput");
 
-const searchInput =
-  document.getElementById("search");
+  const toast = $("#toast");
 
-const findButton =
-  document.getElementById("findButton");
+  function showToast(message) {
 
-const refreshButton =
-  document.getElementById("refreshButton");
+    if (!toast) return;
 
-const results =
-  document.getElementById("results");
+    toast.textContent = message;
+    toast.classList.add("show");
 
-const resultsInfo =
-  document.getElementById("resultsInfo");
+    clearTimeout(showToast.timer);
 
-const historyContainer =
-  document.getElementById("history");
-
-const clearHistoryButton =
-  document.getElementById("clearHistory");
-
-const gamesCount =
-  document.getElementById("gamesCount");
-
-const rewardsCount =
-  document.getElementById("rewardsCount");
-
-const verifiedCount =
-  document.getElementById("verifiedCount");
-
-const helpButton =
-  document.getElementById("helpButton");
-
-const helpModal =
-  document.getElementById("helpModal");
-
-const closeHelp =
-  document.getElementById("closeHelp");
-
-const toast =
-  document.getElementById("toast");
-
-
-/* -------------------------------- */
-/* HELPERS */
-/* -------------------------------- */
-
-function escapeHTML(value) {
-
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-
-}
-
-
-function getHistory() {
-
-  try {
-
-    const value =
-      localStorage.getItem(
-        HISTORY_KEY
-      );
-
-    const parsed =
-      JSON.parse(value || "[]");
-
-    return Array.isArray(parsed)
-      ? parsed
-      : [];
-
-  } catch {
-
-    return [];
-
+    showToast.timer = setTimeout(() => {
+      toast.classList.remove("show");
+    }, 2500);
   }
 
-}
+  function escapeHtml(value) {
 
-
-function saveHistory(item) {
-
-  const history =
-    getHistory();
-
-  history.unshift(item);
-
-  localStorage.setItem(
-    HISTORY_KEY,
-    JSON.stringify(
-      history.slice(0, 30)
-    )
-  );
-
-  renderHistory();
-
-}
-
-
-function showToast(message) {
-
-  toast.textContent =
-    message;
-
-  toast.classList.add(
-    "show"
-  );
-
-  clearTimeout(
-    showToast.timeout
-  );
-
-  showToast.timeout =
-    setTimeout(() => {
-
-      toast.classList.remove(
-        "show"
-      );
-
-    }, 2200);
-
-}
-
-
-function getCurrentGameId() {
-
-  return gameSelect.value;
-
-}
-
-
-function getCurrentGame() {
-
-  return getGame(
-    getCurrentGameId()
-  );
-
-}
-
-
-/* -------------------------------- */
-/* GAMES */
-/* -------------------------------- */
-
-function renderGameSelect() {
-
-  const games =
-    getGames();
-
-  gameSelect.innerHTML = "";
-
-  games.forEach(game => {
-
-    const option =
-      document.createElement(
-        "option"
-      );
-
-    option.value =
-      game.id;
-
-    option.textContent =
-      `${game.icon} ${game.name}`;
-
-    gameSelect.appendChild(
-      option
-    );
-
-  });
-
-}
-
-
-/* -------------------------------- */
-/* STATISTICS */
-/* -------------------------------- */
-
-function renderStats() {
-
-  const stats =
-    getDatabaseStats();
-
-  gamesCount.textContent =
-    stats.games;
-
-  rewardsCount.textContent =
-    stats.rewards;
-
-  verifiedCount.textContent =
-    stats.verified;
-
-}
-
-
-/* -------------------------------- */
-/* REWARDS */
-/* -------------------------------- */
-
-function renderRewards() {
-
-  const gameId =
-    getCurrentGameId();
-
-  const game =
-    getCurrentGame();
-
-  if (!game) {
-
-    results.innerHTML = `
-      <div class="empty">
-        Игра не найдена.
-      </div>
-    `;
-
-    return;
-
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
   }
 
+  async function updateBalance() {
 
-  const query =
-    searchInput.value.trim();
+    if (!homeBalance) return;
 
-  const category =
-    categorySelect.value;
+    const balance =
+      await TokenHubAPI.getBalance();
 
+    homeBalance.textContent =
+      balance.toLocaleString("ru-RU");
+  }
 
-  const rewards =
-    searchRewards({
+  async function updateProfileButton() {
 
-      gameId,
-      query,
-      category
+    if (!profileButton) return;
+
+    const profile =
+      await TokenHubAPI.getProfile();
+
+    if (!profile) {
+      profileButton.textContent = "Войти";
+      return;
+    }
+
+    profileButton.textContent =
+      profile.nickname;
+  }
+
+  function buildCurrencyFilter() {
+
+    if (!currencyFilter) return;
+
+    const currencies = new Set();
+
+    TOKEN_HUB_DATA.games.forEach(game => {
+
+      game.currencies.forEach(currency => {
+        currencies.add(currency);
+      });
 
     });
 
-
-  resultsInfo.textContent =
-    `${game.name} · найдено: ${rewards.length}`;
-
-
-  if (!rewards.length) {
-
-    results.innerHTML = `
-      <div class="empty">
-        По вашему запросу
-        ничего не найдено.
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  results.innerHTML =
-    rewards
-      .map(
-        reward =>
-          createRewardCard(
-            reward,
-            game
-          )
+    [...currencies]
+      .sort((a, b) =>
+        a.localeCompare(b, "ru")
       )
-      .join("");
+      .forEach(currency => {
 
+        const option =
+          document.createElement("option");
 
-  attachRewardEvents();
+        option.value = currency;
+        option.textContent = currency;
 
-}
+        currencyFilter.appendChild(option);
+      });
+  }
 
+  function getFilteredGames() {
 
-/* -------------------------------- */
-/* CARD */
-/* -------------------------------- */
+    const query =
+      (gameSearch?.value || "")
+        .trim()
+        .toLowerCase();
 
-function createRewardCard(
-  reward,
-  game
-) {
+    const currency =
+      currencyFilter?.value || "all";
 
-  const hasRealCode =
-    hasCode(reward);
+    return TOKEN_HUB_DATA.games.filter(game => {
 
+      const matchesSearch =
+        !query ||
+        game.name
+          .toLowerCase()
+          .includes(query) ||
+        game.currencies.some(item =>
+          item.toLowerCase().includes(query)
+        );
 
-  const code =
-    hasRealCode
-      ? `
-        <div class="reward-code">
-          ${escapeHTML(
-            reward.code
-          )}
+      const matchesCurrency =
+        currency === "all" ||
+        game.currencies.includes(currency);
+
+      return matchesSearch && matchesCurrency;
+    });
+  }
+
+  function renderGames() {
+
+    if (!gamesGrid) return;
+
+    const games =
+      getFilteredGames();
+
+    gamesCount.textContent =
+      `${games.length} игр`;
+
+    if (!games.length) {
+
+      gamesGrid.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">⌕</div>
+          <h3>Ничего не найдено</h3>
+          <p>Попробуй изменить запрос или фильтр.</p>
         </div>
-      `
-      : "";
-
-
-  const copyButton =
-    hasRealCode
-      ? `
-        <button
-          class="copy-button"
-          type="button"
-          data-copy-code="${escapeHTML(
-            reward.code
-          )}"
-        >
-          Копировать
-        </button>
-      `
-      : "";
-
-
-  const verifiedBadge =
-    reward.verified
-      ? `
-        <span class="meta verified">
-          ✓ Проверено
-        </span>
-      `
-      : `
-        <span class="meta">
-          Источник
-        </span>
       `;
 
+      return;
+    }
 
-  const statusBadge =
-    reward.status === "available"
-      ? `
-        <span class="meta">
-          Доступно
-        </span>
-      `
-      : `
-        <span class="meta">
-          ${escapeHTML(
-            reward.status
-          )}
-        </span>
-      `;
+    gamesGrid.innerHTML =
+      games.map(game => `
 
+        <article class="game-card">
 
-  return `
-    <article
-      class="reward-card"
-      data-reward-id="${escapeHTML(
-        reward.id
-      )}"
-    >
+          <div class="game-icon">
+            ${escapeHtml(game.icon)}
+          </div>
 
-      <div>
+          <div class="game-content">
 
-        <div class="reward-game">
-          ${escapeHTML(
-            game.name
-          )}
-        </div>
+            <h3>
+              ${escapeHtml(game.name)}
+            </h3>
 
-        <div class="reward-title">
-          ${escapeHTML(
-            reward.title
-          )}
-        </div>
+            <div class="currency-list">
 
-        <div class="reward-description">
-          ${escapeHTML(
-            reward.description
-          )}
-        </div>
+              ${game.currencies.map(currency => `
+                <span class="currency-tag">
+                  ${escapeHtml(currency)}
+                </span>
+              `).join("")}
 
-        <div class="reward-meta">
-
-          ${verifiedBadge}
-
-          ${statusBadge}
-
-          <span class="meta">
-            ${escapeHTML(
-              reward.category
-            )}
-          </span>
-
-        </div>
-
-        ${code}
-
-      </div>
-
-
-      <div class="reward-actions">
-
-        ${copyButton}
-
-        <button
-          class="open-button"
-          type="button"
-          data-open-reward="${escapeHTML(
-            reward.id
-          )}"
-        >
-          Открыть
-        </button>
-
-      </div>
-
-    </article>
-  `;
-
-}
-
-
-/* -------------------------------- */
-/* CARD EVENTS */
-/* -------------------------------- */
-
-function attachRewardEvents() {
-
-  document
-    .querySelectorAll(
-      "[data-copy-code]"
-    )
-    .forEach(button => {
-
-      button.addEventListener(
-        "click",
-        async () => {
-
-          const code =
-            button.dataset.copyCode;
-
-          if (!code) {
-            return;
-          }
-
-
-          try {
-
-            await navigator.clipboard
-              .writeText(code);
-
-            showToast(
-              "Код скопирован"
-            );
-
-          } catch {
-
-            showToast(
-              "Не удалось скопировать код"
-            );
-
-          }
-
-        }
-      );
-
-    });
-
-
-  document
-    .querySelectorAll(
-      "[data-open-reward]"
-    )
-    .forEach(button => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          const rewardId =
-            button.dataset.openReward;
-
-          openReward(
-            rewardId
-          );
-
-        }
-      );
-
-    });
-
-}
-
-
-/* -------------------------------- */
-/* OPEN REWARD */
-/* -------------------------------- */
-
-function openReward(
-  rewardId
-) {
-
-  const game =
-    getCurrentGame();
-
-  if (!game) {
-    return;
-  }
-
-
-  const reward =
-    game.rewards.find(
-      item =>
-        item.id === rewardId
-    );
-
-
-  if (!reward) {
-
-    showToast(
-      "Награда не найдена"
-    );
-
-    return;
-
-  }
-
-
-  saveHistory({
-
-    id:
-      reward.id,
-
-    title:
-      reward.title,
-
-    game:
-      game.name,
-
-    date:
-      new Date()
-        .toLocaleString(
-          "ru-RU"
-        )
-
-  });
-
-
-  const target =
-    reward.officialUrl ||
-    reward.source ||
-    game.redeemUrl ||
-    game.officialUrl;
-
-
-  if (!target) {
-
-    showToast(
-      "Для этой награды нет ссылки"
-    );
-
-    return;
-
-  }
-
-
-  window.open(
-    target,
-    "_blank",
-    "noopener,noreferrer"
-  );
-
-}
-
-
-/* -------------------------------- */
-/* HISTORY */
-/* -------------------------------- */
-
-function renderHistory() {
-
-  const history =
-    getHistory();
-
-
-  if (!history.length) {
-
-    historyContainer.innerHTML = `
-      <div class="empty">
-        Здесь появятся
-        недавно открытые награды.
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  historyContainer.innerHTML =
-    history
-      .map(item => `
-        <div class="history-item">
-
-          <div>
-
-            <div class="history-name">
-              ${escapeHTML(
-                item.title
-              )}
-            </div>
-
-            <div class="history-date">
-              ${escapeHTML(
-                item.game
-              )}
             </div>
 
           </div>
 
-          <div class="history-date">
-            ${escapeHTML(
-              item.date
-            )}
-          </div>
+          <button
+            class="game-button"
+            data-game="${escapeHtml(game.id)}"
+          >
+            Открыть
+          </button>
 
-        </div>
-      `)
-      .join("");
+        </article>
 
-}
-
-
-/* -------------------------------- */
-/* MODAL */
-/* -------------------------------- */
-
-function openHelp() {
-
-  helpModal.classList.remove(
-    "hidden"
-  );
-
-  helpModal.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
-}
-
-
-function closeHelpModal() {
-
-  helpModal.classList.add(
-    "hidden"
-  );
-
-  helpModal.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
-}
-
-
-/* -------------------------------- */
-/* EVENTS */
-/* -------------------------------- */
-
-gameSelect.addEventListener(
-  "change",
-  renderRewards
-);
-
-
-categorySelect.addEventListener(
-  "change",
-  renderRewards
-);
-
-
-searchInput.addEventListener(
-  "input",
-  renderRewards
-);
-
-
-findButton.addEventListener(
-  "click",
-  renderRewards
-);
-
-
-refreshButton.addEventListener(
-  "click",
-  () => {
-
-    renderStats();
-    renderRewards();
-
-    showToast(
-      "Данные обновлены"
-    );
-
+      `).join("");
   }
-);
 
+  async function createProfile() {
 
-clearHistoryButton.addEventListener(
-  "click",
-  () => {
+    const nickname =
+      nicknameInput.value.trim();
 
-    localStorage.removeItem(
-      HISTORY_KEY
-    );
+    if (!nickname) {
+      showToast("Введи никнейм.");
+      return;
+    }
 
-    renderHistory();
+    if (nickname.length < 2) {
+      showToast("Никнейм должен содержать минимум 2 символа.");
+      return;
+    }
 
-    showToast(
-      "История очищена"
-    );
+    const oldProfile =
+      await TokenHubAPI.getProfile();
 
-  }
-);
+    const isNew =
+      !oldProfile;
 
+    const profile = {
+      nickname,
+      createdAt:
+        oldProfile?.createdAt ||
+        new Date().toISOString()
+    };
 
-helpButton.addEventListener(
-  "click",
-  openHelp
-);
+    await TokenHubAPI.saveProfile(profile);
 
+    if (isNew) {
 
-closeHelp.addEventListener(
-  "click",
-  closeHelpModal
-);
+      const balance =
+        await TokenHubAPI.getBalance();
 
+      if (balance === 0) {
 
-helpModal.addEventListener(
-  "click",
-  event => {
+        await TokenHubAPI.addCoins(
+          TOKEN_HUB_CONFIG.rewards.welcomeBonus,
+          "Приветственный бонус"
+        );
 
-    if (
-      event.target ===
-      helpModal
-    ) {
-
-      closeHelpModal();
+      }
 
     }
 
+    profileModal.classList.add("hidden");
+
+    await updateProfileButton();
+    await updateBalance();
+
+    showToast(
+      isNew
+        ? "Профиль создан. Начислено 100 THC."
+        : "Профиль обновлён."
+    );
   }
-);
 
+  function openProfile() {
 
-document.addEventListener(
-  "keydown",
-  event => {
+    profileModal.classList.remove("hidden");
 
-    if (
-      event.key === "Escape"
-    ) {
+    TokenHubAPI.getProfile()
+      .then(profile => {
 
-      closeHelpModal();
+        nicknameInput.value =
+          profile?.nickname || "";
+
+        saveProfile.textContent =
+          profile
+            ? "Сохранить"
+            : "Создать профиль";
+      });
+  }
+
+  profileButton?.addEventListener(
+    "click",
+    openProfile
+  );
+
+  closeProfile?.addEventListener(
+    "click",
+    () => profileModal.classList.add("hidden")
+  );
+
+  profileModal?.addEventListener(
+    "click",
+    event => {
+
+      if (event.target === profileModal) {
+        profileModal.classList.add("hidden");
+      }
 
     }
+  );
 
-  }
-);
+  saveProfile?.addEventListener(
+    "click",
+    createProfile
+  );
 
+  nicknameInput?.addEventListener(
+    "keydown",
+    event => {
 
-/* -------------------------------- */
-/* START */
-/* -------------------------------- */
+      if (event.key === "Enter") {
+        createProfile();
+      }
 
-function init() {
+    }
+  );
 
-  renderGameSelect();
+  gameSearch?.addEventListener(
+    "input",
+    renderGames
+  );
 
-  renderStats();
+  currencyFilter?.addEventListener(
+    "change",
+    renderGames
+  );
 
-  renderRewards();
+  gamesGrid?.addEventListener(
+    "click",
+    event => {
 
-  renderHistory();
+      const button =
+        event.target.closest("[data-game]");
 
-}
+      if (!button) return;
 
+      const game =
+        TOKEN_HUB_DATA.games.find(
+          item => item.id === button.dataset.game
+        );
 
-init();
+      if (!game) return;
+
+      showToast(
+        `${game.name}: валюты ${game.currencies.join(", ")}`
+      );
+    }
+  );
+
+  buildCurrencyFilter();
+  renderGames();
+  updateBalance();
+  updateProfileButton();
+
+});
