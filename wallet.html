@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Кошелёк — Token Hub</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+
+    <a class="brand" href="index.html">Token Hub</a>
+
+    <nav class="nav">
+      <a href="index.html">Главная</a>
+      <a href="wallet.html" class="active">Кошелёк</a>
+      <a href="rewards.html">Награды</a>
+      <a href="transactions.html">История</a>
+    </nav>
+
+  </div>
+</header>
+
+<main class="container legal-page">
+
+  <span class="eyebrow">WALLET</span>
+
+  <h1>Мой кошелёк</h1>
+
+  <section class="legal-card">
+
+    <p class="muted">Баланс Token Hub</p>
+
+    <div class="balance">
+      <span id="walletBalance">0</span>
+      <small>THC</small>
+    </div>
+
+    <p id="walletUser" class="muted"></p>
+
+    <div class="hero-actions">
+
+      <a class="primary-button" href="rewards.html">
+        Получить THC
+      </a>
+
+      <a class="secondary-button" href="transactions.html">
+        История операций
+      </a>
+
+    </div>
+
+  </section>
+
+</main>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="api.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const balance =
+    await TokenHubAPI.getBalance();
+
+  const profile =
+    await TokenHubAPI.getProfile();
+
+  document.getElementById("walletBalance")
+    .textContent =
+      balance.toLocaleString("ru-RU");
+
+  document.getElementById("walletUser")
+    .textContent =
+      profile
+        ? `Профиль: ${profile.nickname}`
+        : "Профиль ещё не создан.";
+});
+</script>
+
+</body>
+</html>
