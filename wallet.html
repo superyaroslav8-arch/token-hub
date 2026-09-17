@@ -2,9 +2,19 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
 
-  <title>Кошелёк — Token Hub</title>
+  <meta
+    name="description"
+    content="Token Hub — получение игровых наград и цифровых валют."
+  >
+
+  <meta name="theme-color" content="#050505">
+
+  <title>Token Hub</title>
 
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
@@ -15,44 +25,273 @@
 <header class="site-header">
   <div class="container header-inner">
 
-    <a class="brand" href="index.html">Token Hub</a>
+    <a href="index.html" class="brand">
+      Token Hub
+    </a>
 
     <nav class="nav">
-      <a href="index.html">Главная</a>
-      <a href="wallet.html" class="active">Кошелёк</a>
-      <a href="rewards.html">Награды</a>
-      <a href="transactions.html">История</a>
+      <a href="#games" class="active">Игры</a>
+      <a href="#history">История</a>
+      <a href="help.html">Помощь</a>
     </nav>
 
   </div>
 </header>
 
-<main class="container legal-page">
 
-  <span class="eyebrow">WALLET</span>
+<main>
 
-  <h1>Мой кошелёк</h1>
+  <!-- HERO -->
 
-  <section class="legal-card">
+  <section class="hero">
 
-    <p class="muted">Баланс Token Hub</p>
+    <div class="container">
 
-    <div class="balance">
-      <span id="walletBalance">0</span>
-      <small>THC</small>
+      <div class="hero-content">
+
+        <span class="eyebrow">
+          DIGITAL REWARDS
+        </span>
+
+        <h1>
+          Игровые валюты
+          <span>в одном месте.</span>
+        </h1>
+
+        <p>
+          Выбери игру, укажи игровой никнейм,
+          валюту и количество.
+        </p>
+
+        <a
+          href="#games"
+          class="primary-button"
+        >
+          Получить награду
+        </a>
+
+      </div>
+
     </div>
 
-    <p id="walletUser" class="muted"></p>
+  </section>
 
-    <div class="hero-actions">
 
-      <a class="primary-button" href="rewards.html">
-        Получить THC
-      </a>
+  <!-- GET CURRENCY -->
 
-      <a class="secondary-button" href="transactions.html">
-        История операций
-      </a>
+  <section class="section">
+
+    <div class="container">
+
+      <div class="section-heading">
+
+        <div>
+          <span class="eyebrow">
+            GET REWARD
+          </span>
+
+          <h2>
+            Получение
+          </h2>
+        </div>
+
+      </div>
+
+
+      <div class="legal-card">
+
+        <form id="claimForm">
+
+          <div class="form-group">
+
+            <label for="gameSelect">
+              Игра
+            </label>
+
+            <select
+              id="gameSelect"
+              class="text-input"
+              required
+            >
+              <option value="">
+                Выбери игру
+              </option>
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="currencySelect">
+              Валюта
+            </label>
+
+            <select
+              id="currencySelect"
+              class="text-input"
+              required
+              disabled
+            >
+              <option value="">
+                Сначала выбери игру
+              </option>
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="nicknameInput">
+              Игровой никнейм
+            </label>
+
+            <input
+              id="nicknameInput"
+              class="text-input"
+              type="text"
+              maxlength="64"
+              autocomplete="off"
+              placeholder="Введи свой никнейм"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="amountInput">
+              Количество
+            </label>
+
+            <input
+              id="amountInput"
+              class="text-input"
+              type="number"
+              min="1"
+              step="1"
+              placeholder="Например: 100"
+              required
+            >
+
+          </div>
+
+
+          <button
+            id="claimButton"
+            type="submit"
+            class="primary-button full"
+          >
+            Получить
+          </button>
+
+        </form>
+
+
+        <div
+          id="claimResult"
+          class="empty-state"
+          hidden
+        ></div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- GAMES -->
+
+  <section
+    id="games"
+    class="section section-alt"
+  >
+
+    <div class="container">
+
+      <div class="section-heading">
+
+        <div>
+
+          <span class="eyebrow">
+            GAMES
+          </span>
+
+          <h2>
+            Поддерживаемые игры
+          </h2>
+
+        </div>
+
+        <span
+          id="gamesCount"
+          class="counter"
+        >
+          0 игр
+        </span>
+
+      </div>
+
+
+      <div class="search-panel">
+
+        <input
+          id="gameSearch"
+          type="search"
+          placeholder="Найти игру..."
+          autocomplete="off"
+        >
+
+      </div>
+
+
+      <div
+        id="gamesGrid"
+        class="games-grid"
+      ></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- HISTORY -->
+
+  <section
+    id="history"
+    class="section"
+  >
+
+    <div class="container">
+
+      <div class="section-heading">
+
+        <div>
+
+          <span class="eyebrow">
+            HISTORY
+          </span>
+
+          <h2>
+            История запросов
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="historyList"
+        class="legal-card"
+      >
+        <p class="muted">
+          История пока пуста.
+        </p>
+      </div>
 
     </div>
 
@@ -60,30 +299,46 @@
 
 </main>
 
+
+<footer class="site-footer">
+
+  <div class="container footer-inner">
+
+    <strong>
+      Token Hub
+    </strong>
+
+    <div>
+
+      <a href="help.html">
+        Помощь
+      </a>
+
+      <a href="privacy.html">
+        Конфиденциальность
+      </a>
+
+      <a href="terms.html">
+        Условия
+      </a>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+
 <script src="config.js"></script>
 <script src="data.js"></script>
 <script src="api.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", async () => {
-
-  const balance =
-    await TokenHubAPI.getBalance();
-
-  const profile =
-    await TokenHubAPI.getProfile();
-
-  document.getElementById("walletBalance")
-    .textContent =
-      balance.toLocaleString("ru-RU");
-
-  document.getElementById("walletUser")
-    .textContent =
-      profile
-        ? `Профиль: ${profile.nickname}`
-        : "Профиль ещё не создан.";
-});
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
