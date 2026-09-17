@@ -2,155 +2,403 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#080808">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta
+    name="theme-color"
+    content="#050505"
+  >
+
+  <meta
+    name="description"
+    content="Token Hub — каталог игровых кодов, наград и официальных способов активации."
+  >
+
+  <link rel="manifest" href="manifest.json">
+
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="icon.svg"
+  >
+
+  <link
+    rel="apple-touch-icon"
+    href="icon.svg"
+  >
+
   <title>Token Hub</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header class="header">
-  <div class="brand">
-    <div class="brand-icon">T</div>
-    <span>Token Hub</span>
-  </div>
+  <header class="header">
 
-  <button class="help-button" id="helpButton">
-    Как это работает?
-  </button>
-</header>
+    <a
+      class="brand"
+      href="#"
+      aria-label="Token Hub"
+    >
+      <span class="brand-icon">T</span>
+      <span>Token Hub</span>
+    </a>
 
-<main class="container">
-
-  <section class="hero">
-    <div class="badge">FREE GAME REWARDS</div>
-    <h1>Игровые награды<br><span>в одном месте.</span></h1>
-    <p>
-      Находи доступные коды и официальные способы получения
-      игровых наград без передачи пароля.
-    </p>
-  </section>
-
-  <section class="hub-card">
-
-    <div class="field">
-      <label for="game">Игра</label>
-
-      <select id="game">
-        <option value="roblox">Roblox</option>
-        <option value="fortnite">Fortnite</option>
-        <option value="brawlstars">Brawl Stars</option>
-        <option value="minecraft">Minecraft</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label for="search">Поиск награды</label>
-
-      <input
-        id="search"
-        type="text"
-        placeholder="Например: Robux, Gems, Skin..."
-        autocomplete="off"
-      >
-    </div>
-
-    <button class="main-button" id="findButton">
-      <span>Найти доступные награды</span>
-      <span class="arrow">→</span>
+    <button
+      class="help-button"
+      id="helpButton"
+      type="button"
+    >
+      Как это работает?
     </button>
 
-  </section>
+  </header>
 
-  <section class="results-section">
 
-    <div class="section-header">
-      <div>
-        <h2>Доступные награды</h2>
-        <p id="resultsInfo">Выберите игру</p>
+  <main class="container">
+
+    <section class="hero">
+
+      <div class="badge">
+        GAME REWARDS HUB
       </div>
 
-      <button id="refreshButton" class="small-button">
-        ↻ Обновить
+      <h1>
+        Игровые награды
+        <br>
+        <span>в одном месте.</span>
+      </h1>
+
+      <p>
+        Находи доступные коды, игровые награды
+        и официальные способы их активации.
+      </p>
+
+    </section>
+
+
+    <section class="hub-card">
+
+      <div class="field">
+
+        <label for="game">
+          Игра
+        </label>
+
+        <select id="game">
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="category">
+          Категория
+        </label>
+
+        <select id="category">
+
+          <option value="all">
+            Все
+          </option>
+
+          <option value="codes">
+            Коды
+          </option>
+
+          <option value="official">
+            Официальные
+          </option>
+
+          <option value="in-game">
+            Игровые награды
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="search">
+          Поиск
+        </label>
+
+        <input
+          id="search"
+          type="search"
+          placeholder="Найти награду..."
+          autocomplete="off"
+          spellcheck="false"
+        >
+
+      </div>
+
+
+      <button
+        class="main-button"
+        id="findButton"
+        type="button"
+      >
+
+        <span>
+          Найти награды
+        </span>
+
+        <span class="arrow">
+          →
+        </span>
+
       </button>
-    </div>
 
-    <div id="results" class="results"></div>
+    </section>
 
-  </section>
 
-  <section class="history-section">
+    <section class="stats">
 
-    <div class="section-header">
-      <div>
-        <h2>История</h2>
-        <p>Недавно открытые награды</p>
+      <div class="stat-card">
+
+        <span
+          class="stat-value"
+          id="gamesCount"
+        >
+          0
+        </span>
+
+        <span class="stat-label">
+          Игр
+        </span>
+
       </div>
 
-      <button id="clearHistory" class="small-button">
-        Очистить
+
+      <div class="stat-card">
+
+        <span
+          class="stat-value"
+          id="rewardsCount"
+        >
+          0
+        </span>
+
+        <span class="stat-label">
+          Наград
+        </span>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <span
+          class="stat-value"
+          id="verifiedCount"
+        >
+          0
+        </span>
+
+        <span class="stat-label">
+          Проверено
+        </span>
+
+      </div>
+
+    </section>
+
+
+    <section class="results-section">
+
+      <div class="section-header">
+
+        <div>
+
+          <h2>
+            Доступные награды
+          </h2>
+
+          <p id="resultsInfo">
+            Загрузка...
+          </p>
+
+        </div>
+
+
+        <button
+          class="small-button"
+          id="refreshButton"
+          type="button"
+        >
+          ↻ Обновить
+        </button>
+
+      </div>
+
+
+      <div
+        class="results"
+        id="results"
+      >
+      </div>
+
+    </section>
+
+
+    <section class="history-section">
+
+      <div class="section-header">
+
+        <div>
+
+          <h2>
+            История
+          </h2>
+
+          <p>
+            Недавно открытые награды
+          </p>
+
+        </div>
+
+
+        <button
+          class="small-button"
+          id="clearHistory"
+          type="button"
+        >
+          Очистить
+        </button>
+
+      </div>
+
+
+      <div
+        class="history"
+        id="history"
+      >
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <div
+    class="modal hidden"
+    id="helpModal"
+    aria-hidden="true"
+  >
+
+    <div class="modal-card">
+
+      <button
+        class="close-button"
+        id="closeHelp"
+        type="button"
+        aria-label="Закрыть"
+      >
+        ×
       </button>
-    </div>
 
-    <div id="history" class="history"></div>
 
-  </section>
-
-</main>
-
-<!-- HELP -->
-
-<div class="modal hidden" id="helpModal">
-
-  <div class="modal-card">
-
-    <button class="close-button" id="closeHelp">×</button>
-
-    <div class="modal-icon">?</div>
-
-    <h2>Как работает Token Hub?</h2>
-
-    <p>
-      Token Hub помогает находить игровые коды и доступные
-      способы получения наград.
-    </p>
-
-    <div class="steps">
-
-      <div class="step">
-        <b>01</b>
-        <span>Выбери игру</span>
+      <div class="modal-icon">
+        ?
       </div>
 
-      <div class="step">
-        <b>02</b>
-        <span>Найди доступную награду</span>
+
+      <h2>
+        Как работает Token Hub?
+      </h2>
+
+
+      <p>
+        Token Hub помогает находить игровые коды,
+        награды и официальные страницы активации.
+      </p>
+
+
+      <div class="steps">
+
+        <div class="step">
+
+          <b>01</b>
+
+          <span>
+            Выбери игру
+          </span>
+
+        </div>
+
+
+        <div class="step">
+
+          <b>02</b>
+
+          <span>
+            Найди нужную награду
+          </span>
+
+        </div>
+
+
+        <div class="step">
+
+          <b>03</b>
+
+          <span>
+            Если есть код — скопируй его
+          </span>
+
+        </div>
+
+
+        <div class="step">
+
+          <b>04</b>
+
+          <span>
+            Открой страницу активации
+          </span>
+
+        </div>
+
       </div>
 
-      <div class="step">
-        <b>03</b>
-        <span>Скопируй код</span>
+
+      <div class="security-note">
+
+        🔒 Token Hub не запрашивает пароль,
+        cookie или токен игрового аккаунта.
+
       </div>
 
-      <div class="step">
-        <b>04</b>
-        <span>Активируй его там, где это предусмотрено игрой</span>
-      </div>
-
-    </div>
-
-    <div class="security-note">
-      🔒 Token Hub никогда не просит пароль от игрового аккаунта.
     </div>
 
   </div>
 
-</div>
 
-<div id="toast" class="toast"></div>
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite"
+  >
+  </div>
 
-<script src="script.js"></script>
+
+  <!--
+    ВАЖНО:
+    data.js должен подключаться ПЕРЕД script.js.
+  -->
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
 
 </body>
 </html>
