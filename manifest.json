@@ -1,0 +1,12 @@
+{
+  "name": "Token Hub",
+  "short_name": "Token Hub",
+  "description": "Игры, цифровые валюты и собственная система Token Hub Coins.",
+  "lang": "ru",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "orientation": "portrait"
+}
