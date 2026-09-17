@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  >
+
+  <title>История — Token Hub</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header class="site-header">
+
+  <div class="container header-inner">
+
+    <a class="brand" href="index.html">
+      Token Hub
+    </a>
+
+    <nav class="nav">
+
+      <a href="index.html">
+        Главная
+      </a>
+
+      <a href="wallet.html">
+        Кошелёк
+      </a>
+
+      <a href="rewards.html">
+        Награды
+      </a>
+
+      <a href="transactions.html" class="active">
+        История
+      </a>
+
+    </nav>
+
+  </div>
+
+</header>
+
+<main class="container legal-page">
+
+  <span class="eyebrow">TRANSACTIONS</span>
+
+  <h1>История операций</h1>
+
+  <div id="transactions"></div>
+
+</main>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="api.js"></script>
+
+<script>
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
+
+    const container =
+      document.getElementById("transactions");
+
+    const transactions =
+      await TokenHubAPI.getTransactions();
+
+    if (!transactions.length) {
+
+      container.innerHTML = `
+        <section class="legal-card">
+          <h2>Операций пока нет</h2>
+          <p>
+            Получи первую награду в разделе
+            «Награды».
+          </p>
+        </section>
+      `;
+
+      return;
+    }
+
+    container.innerHTML =
+      transactions.map(item => {
+
+        const date =
+          new Date(item.date)
+            .toLocaleString("ru-RU");
+
+        const sign =
+          item.amount >= 0 ? "+" : "";
+
+        return `
+          <section class="legal-card">
+
+            <h2>
+              ${item.reason}
+            </h2>
+
+            <p>
+              ${date}
+            </p>
+
+            <strong>
+              ${sign}${item.amount} THC
+            </strong>
+
+            <p>
+              Баланс после операции:
+              ${item.balanceAfter} THC
+            </p>
+
+          </section>
+        `;
+
+      }).join("");
+
+  }
+);
+
+</script>
+
+</body>
+</html>
