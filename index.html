@@ -2,10 +2,17 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta
+    name="description"
+    content="Token Hub — получение игровых наград и цифровых валют."
+  >
 
   <meta name="theme-color" content="#050505">
-  <meta name="description" content="Token Hub — игры, цифровые валюты, награды и собственная система Token Hub Coins.">
 
   <title>Token Hub</title>
 
@@ -15,227 +22,323 @@
 
 <body>
 
-  <header class="site-header">
-    <div class="container header-inner">
+<header class="site-header">
+  <div class="container header-inner">
 
-      <a href="index.html" class="brand">Token Hub</a>
+    <a href="index.html" class="brand">
+      Token Hub
+    </a>
 
-      <nav class="nav">
-        <a href="index.html" class="active">Главная</a>
-        <a href="wallet.html">Кошелёк</a>
-        <a href="rewards.html">Награды</a>
-        <a href="transactions.html">История</a>
-      </nav>
+    <nav class="nav">
+      <a href="#games" class="active">Игры</a>
+      <a href="#history">История</a>
+      <a href="help.html">Помощь</a>
+    </nav>
 
-      <button id="profileButton" class="profile-button">
-        Войти
-      </button>
+  </div>
+</header>
+
+
+<main>
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="container">
+
+      <div class="hero-content">
+
+        <span class="eyebrow">
+          DIGITAL REWARDS
+        </span>
+
+        <h1>
+          Игровые валюты
+          <span>в одном месте.</span>
+        </h1>
+
+        <p>
+          Выбери игру, укажи игровой никнейм,
+          валюту и количество.
+        </p>
+
+        <a
+          href="#games"
+          class="primary-button"
+        >
+          Получить награду
+        </a>
+
+      </div>
 
     </div>
-  </header>
 
-  <main>
+  </section>
 
-    <section class="hero">
-      <div class="container">
 
-        <div class="hero-content">
+  <!-- GET CURRENCY -->
 
-          <span class="eyebrow">DIGITAL REWARDS PLATFORM</span>
+  <section class="section">
 
-          <h1>
-            Игры.
-            <span>Валюты.</span>
-            Награды.
-          </h1>
+    <div class="container">
 
-          <p>
-            Token Hub объединяет игры и цифровые награды
-            в одном удобном интерфейсе.
-          </p>
+      <div class="section-heading">
 
-          <div class="hero-actions">
-            <a href="#games" class="primary-button">
-              Найти игру
-            </a>
+        <div>
+          <span class="eyebrow">
+            GET REWARD
+          </span>
 
-            <a href="wallet.html" class="secondary-button">
-              Мой кошелёк
-            </a>
-          </div>
-
+          <h2>
+            Получение
+          </h2>
         </div>
 
       </div>
-    </section>
 
-    <section class="wallet-preview">
-      <div class="container">
 
-        <div class="wallet-card">
+      <div class="legal-card">
 
-          <div>
-            <span class="muted">Ваш баланс</span>
+        <form id="claimForm">
 
-            <div class="balance">
-              <span id="homeBalance">0</span>
-              <small>THC</small>
-            </div>
-          </div>
+          <div class="form-group">
 
-          <div class="wallet-actions">
+            <label for="gameSelect">
+              Игра
+            </label>
 
-            <a href="rewards.html" class="primary-button">
-              Получить THC
-            </a>
-
-            <a href="transactions.html" class="secondary-button">
-              История
-            </a>
+            <select
+              id="gameSelect"
+              class="text-input"
+              required
+            >
+              <option value="">
+                Выбери игру
+              </option>
+            </select>
 
           </div>
 
-        </div>
 
-      </div>
-    </section>
+          <div class="form-group">
 
-    <section id="games" class="section">
+            <label for="currencySelect">
+              Валюта
+            </label>
 
-      <div class="container">
+            <select
+              id="currencySelect"
+              class="text-input"
+              required
+              disabled
+            >
+              <option value="">
+                Сначала выбери игру
+              </option>
+            </select>
 
-        <div class="section-heading">
-
-          <div>
-            <span class="eyebrow">GAMES</span>
-            <h2>Игровые валюты</h2>
           </div>
 
-          <span id="gamesCount" class="counter">0 игр</span>
 
-        </div>
+          <div class="form-group">
 
-        <div class="search-panel">
+            <label for="nicknameInput">
+              Игровой никнейм
+            </label>
 
-          <input
-            id="gameSearch"
-            type="search"
-            placeholder="Найти игру..."
-            autocomplete="off"
+            <input
+              id="nicknameInput"
+              class="text-input"
+              type="text"
+              maxlength="64"
+              autocomplete="off"
+              placeholder="Введи свой никнейм"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="amountInput">
+              Количество
+            </label>
+
+            <input
+              id="amountInput"
+              class="text-input"
+              type="number"
+              min="1"
+              step="1"
+              placeholder="Например: 100"
+              required
+            >
+
+          </div>
+
+
+          <button
+            id="claimButton"
+            type="submit"
+            class="primary-button full"
           >
+            Получить
+          </button>
 
-          <select id="currencyFilter">
-            <option value="all">Все валюты</option>
-          </select>
+        </form>
 
-        </div>
 
-        <div id="gamesGrid" class="games-grid"></div>
+        <div
+          id="claimResult"
+          class="empty-state"
+          hidden
+        ></div>
 
-      </div>
-
-    </section>
-
-    <section class="section section-alt">
-
-      <div class="container">
-
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">HOW IT WORKS</span>
-            <h2>Как работает Token Hub</h2>
-          </div>
-        </div>
-
-        <div class="steps-grid">
-
-          <article class="step-card">
-            <span>01</span>
-            <h3>Создай профиль</h3>
-            <p>
-              Укажи свой никнейм. Профиль сохраняется
-              локально на твоём устройстве.
-            </p>
-          </article>
-
-          <article class="step-card">
-            <span>02</span>
-            <h3>Получай THC</h3>
-            <p>
-              Выполняй задания и получай собственные
-              Token Hub Coins.
-            </p>
-          </article>
-
-          <article class="step-card">
-            <span>03</span>
-            <h3>Используй награды</h3>
-            <p>
-              Следи за балансом и историей операций
-              прямо внутри Token Hub.
-            </p>
-          </article>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-  <footer class="site-footer">
-
-    <div class="container footer-inner">
-
-      <strong>Token Hub</strong>
-
-      <div>
-        <a href="help.html">Помощь</a>
-        <a href="privacy.html">Конфиденциальность</a>
-        <a href="terms.html">Условия</a>
       </div>
 
     </div>
 
-  </footer>
+  </section>
 
-  <div id="profileModal" class="modal hidden">
 
-    <div class="modal-card">
+  <!-- GAMES -->
 
-      <button id="closeProfile" class="modal-close">
-        ×
-      </button>
+  <section
+    id="games"
+    class="section section-alt"
+  >
 
-      <h2>Профиль</h2>
+    <div class="container">
 
-      <p class="muted">
-        Введи никнейм для своего Token Hub профиля.
-      </p>
+      <div class="section-heading">
 
-      <input
-        id="nicknameInput"
-        class="text-input"
-        type="text"
-        maxlength="24"
-        placeholder="Твой никнейм"
+        <div>
+
+          <span class="eyebrow">
+            GAMES
+          </span>
+
+          <h2>
+            Поддерживаемые игры
+          </h2>
+
+        </div>
+
+        <span
+          id="gamesCount"
+          class="counter"
+        >
+          0 игр
+        </span>
+
+      </div>
+
+
+      <div class="search-panel">
+
+        <input
+          id="gameSearch"
+          type="search"
+          placeholder="Найти игру..."
+          autocomplete="off"
+        >
+
+      </div>
+
+
+      <div
+        id="gamesGrid"
+        class="games-grid"
+      ></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- HISTORY -->
+
+  <section
+    id="history"
+    class="section"
+  >
+
+    <div class="container">
+
+      <div class="section-heading">
+
+        <div>
+
+          <span class="eyebrow">
+            HISTORY
+          </span>
+
+          <h2>
+            История запросов
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="historyList"
+        class="legal-card"
       >
+        <p class="muted">
+          История пока пуста.
+        </p>
+      </div>
 
-      <button id="saveProfile" class="primary-button full">
-        Создать профиль
-      </button>
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-inner">
+
+    <strong>
+      Token Hub
+    </strong>
+
+    <div>
+
+      <a href="help.html">
+        Помощь
+      </a>
+
+      <a href="privacy.html">
+        Конфиденциальность
+      </a>
+
+      <a href="terms.html">
+        Условия
+      </a>
 
     </div>
 
   </div>
 
-  <div id="toast" class="toast"></div>
+</footer>
 
-  <script src="config.js"></script>
-  <script src="data.js"></script>
-  <script src="api.js"></script>
-  <script src="script.js"></script>
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="api.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
