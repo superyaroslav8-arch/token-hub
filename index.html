@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="Token Hub — единый интерфейс для игровых валют">
+  <title>Token Hub</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Первый запуск -->
+  <div class="onboarding hidden" id="onboarding">
+    <div class="onboarding-card">
+      <div class="onboarding-progress">
+        <span class="progress-dot active"></span>
+        <span class="progress-dot"></span>
+        <span class="progress-dot"></span>
+        <span class="progress-dot"></span>
+      </div>
+      <div class="onboarding-content">
+        <div class="onboarding-icon">01</div>
+        <h2 id="onboardingTitle">
+          Выберите игру
+        </h2>
+        <p id="onboardingText">
+          Сначала выберите игру, для которой хотите выполнить операцию.
+        </p>
+      </div>
+      <div class="onboarding-actions">
+        <button
+          class="button secondary-button hidden"
+          id="onboardingBack"
+        >
+          Назад
+        </button>
+        <button
+          class="button primary-button"
+          id="onboardingNext"
+        >
+          Далее
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Верхняя панель -->
+  <header class="header">
+    <a href="#" class="logo" aria-label="Token Hub">
+      <span class="logo-mark">T</span>
+      <span class="logo-text">Token Hub</span>
+    </a>
+    <button
+      class="help-button"
+      id="helpButton"
+      type="button"
+    >
+      Как это работает?
+    </button>
+  </header>
+  <main class="main">
+    <!-- Hero -->
+    <section class="hero">
+      <span class="hero-label">
+        TOKEN HUB
+      </span>
+      <h1>
+        Игровые токены<br>
+        <span>в одном месте.</span>
+      </h1>
+      <p>
+        Выберите игру, укажите игровой никнейм
+        и количество необходимой валюты.
+      </p>
+    </section>
+    <!-- Основная форма -->
+    <section class="card">
+      <div class="card-header">
+        <div>
+          <span class="card-label">
+            НОВАЯ ОПЕРАЦИЯ
+          </span>
+          <h2>
+            Зачисление
+          </h2>
+        </div>
+        <div class="status-dot"></div>
+      </div>
+      <!-- Игра -->
+      <div class="field">
+        <label for="game">
+          Игра
+        </label>
+        <select id="game">
+          <option value="">
+            Выберите игру
+          </option>
+          <option
+            value="roblox"
+            data-currency="Robux"
+          >
+            Roblox
+          </option>
+          <option
+            value="fortnite"
+            data-currency="V-Bucks"
+          >
+            Fortnite
+          </option>
+          <option
+            value="brawl-stars"
+            data-currency="Gems"
+          >
+            Brawl Stars
+          </option>
+          <option
+            value="minecraft"
+            data-currency="Minecoins"
+          >
+            Minecraft
+          </option>
+        </select>
+      </div>
+      <!-- Никнейм -->
+      <div class="field">
+        <label for="username">
+          Игровой никнейм
+        </label>
+        <input
+          id="username"
+          type="text"
+          maxlength="50"
+          autocomplete="off"
+          placeholder="Например, Player123"
+        >
+      </div>
+      <!-- Количество -->
+      <div class="field">
+        <label for="amount">
+          Количество
+        </label>
+        <div class="amount-input">
+          <input
+            id="amount"
+            type="number"
+            min="1"
+            max="1000000"
+            inputmode="numeric"
+            placeholder="100"
+          >
+          <span id="currency">
+            валюта
+          </span>
+        </div>
+      </div>
+      <!-- Кнопка -->
+      <button
+        class="button primary-button submit-button"
+        id="submitButton"
+        type="button"
+      >
+        <span id="submitText">
+          Зачислить
+        </span>
+        <span
+          class="loader hidden"
+          id="loader"
+        ></span>
+      </button>
+      <!-- Статус -->
+      <div
+        class="operation-status hidden"
+        id="status"
+        role="status"
+      ></div>
+    </section>
+    <!-- История -->
+    <section class="history-section">
+      <div class="section-header">
+        <div>
+          <span class="section-label">
+            ИСТОРИЯ
+          </span>
+          <h2>
+            Последние операции
+          </h2>
+        </div>
+        <button
+          class="clear-button"
+          id="clearHistory"
+          type="button"
+        >
+          Очистить
+        </button>
+      </div>
+      <div
+        class="history"
+        id="history"
+      ></div>
+    </section>
+  </main>
+  <!-- Toast -->
+  <div
+    class="toast"
+    id="toast"
+    role="alert"
+  ></div>
+  <script src="script.js"></script>
+</body>
+</html>
